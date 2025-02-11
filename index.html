@@ -69,11 +69,12 @@
         }
 
         input, select {
-            width: calc(100% - 1rem);
+            width: 100%;
             padding: 0.6rem;
             border: 2px solid #e0e0e0;
             border-radius: 0.5rem;
             font-size: 1rem;
+            box-sizing: border-box;
         }
 
         .button-group {
@@ -163,40 +164,5 @@
 
         <div class="result" id="result"></div>
     </div>
-
-    <script>
-        function calculateScore() {
-            const totalQuestions = parseInt(document.getElementById('totalQuestions').value);
-            const maxMarks = parseInt(document.getElementById('maxMarks').value);
-            const attempted = parseInt(document.getElementById('attemptedQuestions').value);
-            const wrong = parseInt(document.getElementById('wrongAnswers').value);
-            const ratio = document.getElementById('negativeRatio').value;
-
-            if ([totalQuestions, maxMarks, attempted, wrong].some(isNaN)) {
-                showResult("Please fill all fields correctly!", true);
-                return;
-            }
-
-            const correct = attempted - wrong;
-            const marksPerQuestion = maxMarks / totalQuestions;
-            const negativeMarks = wrong * (eval(ratio) * marksPerQuestion);
-            const finalScore = (correct * marksPerQuestion) - negativeMarks;
-            
-            showResult(`Final Score: ${finalScore.toFixed(2)}`);
-        }
-
-        function showResult(text, isError = false) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = text;
-            resultDiv.style.background = isError ? 'rgba(214, 48, 49, 0.1)' : 'rgba(0, 184, 148, 0.1)';
-            resultDiv.style.color = isError ? '#d63031' : '#00b894';
-        }
-
-        function resetForm() {
-            document.querySelectorAll('input').forEach(input => input.value = '');
-            document.getElementById('negativeRatio').value = '0';
-            document.getElementById('result').innerHTML = '';
-        }
-    </script>
 </body>
 </html>
