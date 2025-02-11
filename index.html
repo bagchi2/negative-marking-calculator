@@ -22,10 +22,13 @@
         
         <div class="exam-list">
             PSC, RRB, NEET, UPPSC, BPSC, UPSSSC
-        </div></br></br>
+        </div><br><br>
 
-        <label>Total Questions (Also Maximum Marks):</label>
+        <label>Total Questions:</label>
         <input type="number" id="totalQuestions" placeholder="Enter total questions"><br>
+
+        <label>Maximum Marks:</label>
+        <input type="number" id="maxMarks" placeholder="Enter maximum marks"><br>
 
         <label>Total Questions Attempted:</label>
         <input type="number" id="attemptedQuestions" placeholder="Number of attempted questions"><br>
@@ -54,32 +57,27 @@
     <script>
         function calculateScore() {
             let totalQuestions = parseInt(document.getElementById('totalQuestions').value);
+            let maxMarks = parseInt(document.getElementById('maxMarks').value);
             let attemptedQuestions = parseInt(document.getElementById('attemptedQuestions').value);
             let wrongAnswers = parseInt(document.getElementById('wrongAnswers').value);
             let negativeRatio = document.getElementById('negativeRatio').value;
 
-            if (isNaN(totalQuestions) || isNaN(attemptedQuestions) || isNaN(wrongAnswers)) {
+            if (isNaN(totalQuestions) || isNaN(maxMarks) || isNaN(attemptedQuestions) || isNaN(wrongAnswers)) {
                 document.getElementById('result').innerHTML = "Please enter valid numbers!";
                 return;
             }
 
-            // Each correct answer is worth 1 mark (since Total Questions = Maximum Marks)
-            let marksPerCorrect = 1;
-
-            // Convert negative marking ratio to decimal
+            let marksPerCorrect = maxMarks / totalQuestions;
             let negativeMarks = eval(negativeRatio) * marksPerCorrect;
-
-            // Calculate correct answers
             let correctAnswers = attemptedQuestions - wrongAnswers;
-
-            // Calculate final score
             let score = (correctAnswers * marksPerCorrect) - (wrongAnswers * negativeMarks);
             
-            document.getElementById('result').innerHTML = `Final Score: ${score}`;
+            document.getElementById('result').innerHTML = `Final Score: ${score.toFixed(2)}`;
         }
 
         function resetForm() {
             document.getElementById('totalQuestions').value = "";
+            document.getElementById('maxMarks').value = "";
             document.getElementById('attemptedQuestions').value = "";
             document.getElementById('wrongAnswers').value = "";
             document.getElementById('negativeRatio').value = "0";
