@@ -69,11 +69,12 @@
         }
 
         input, select {
-            width: calc(100% - 1rem);
+            width: 100%;
             padding: 0.6rem;
             border: 2px solid #e0e0e0;
             border-radius: 0.5rem;
             font-size: 1rem;
+            box-sizing: border-box;
         }
 
         .button-group {
@@ -148,11 +149,11 @@
             <label for="negativeRatio">Negative Marking</label>
             <select id="negativeRatio">
                 <option value="0">No Negative</option>
-                <option value="1/1">-1 (Full)</option>
-                <option value="1/2">-½</option>
-                <option value="1/3">-⅓</option>
-                <option value="1/4">-¼</option>
-                <option value="1/5">-⅕</option>
+                <option value="-1">-1 (Full)</option>
+                <option value="-0.5">-½</option>
+                <option value="-0.333">-⅓</option>
+                <option value="-0.25">-¼</option>
+                <option value="-0.2">-⅕</option>
             </select>
         </div>
 
@@ -170,7 +171,7 @@
             const maxMarks = parseInt(document.getElementById('maxMarks').value);
             const attempted = parseInt(document.getElementById('attemptedQuestions').value);
             const wrong = parseInt(document.getElementById('wrongAnswers').value);
-            const ratio = document.getElementById('negativeRatio').value;
+            const negativeRatio = parseFloat(document.getElementById('negativeRatio').value);
 
             if ([totalQuestions, maxMarks, attempted, wrong].some(isNaN)) {
                 showResult("Please fill all fields correctly!", true);
@@ -179,8 +180,8 @@
 
             const correct = attempted - wrong;
             const marksPerQuestion = maxMarks / totalQuestions;
-            const negativeMarks = wrong * (eval(ratio) * marksPerQuestion);
-            const finalScore = (correct * marksPerQuestion) - negativeMarks;
+            const negativeMarks = wrong * negativeRatio * marksPerQuestion;
+            const finalScore = (correct * marksPerQuestion) + negativeMarks;
             
             showResult(`Final Score: ${finalScore.toFixed(2)}`);
         }
