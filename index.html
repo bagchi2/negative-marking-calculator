@@ -5,83 +5,244 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negative Marking Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 2px 2px 10px #ccc; }
-        input, select { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
-        button { width: 48%; background-color: blue; color: white; padding: 10px 15px; border: none; cursor: pointer; }
-        button:hover { background-color: darkblue; }
-        .result { font-size: 20px; font-weight: bold; margin-top: 10px; }
-        .exam-list { font-size: 14px; color: gray; margin-top: 10px; line-height: 1.6; }
-        hr { border: 0; height: 1px; background: #ccc; margin: 10px 0; }
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #6c5ce7;
+            --success-color: #00b894;
+            --error-color: #d63031;
+            --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--background-gradient);
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 440px;
+            margin: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .exam-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .exam-tag {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2d3436;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.7rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[onclick="calculateScore()"] {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        button[onclick="resetForm()"] {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Negative Marking Calculator</h2>
+        <h2>📝 Negative Marking Calculator</h2>
         
         <div class="exam-list">
-            PSC, RRB, NEET, UPPSC, BPSC, UPSSSC
-        </div><br><br>
+            <span class="exam-tag">NEET</span>
+            <span class="exam-tag">UPSC</span>
+            <span class="exam-tag">SSC</span>
+            <span class="exam-tag">JEE</span>
+            <span class="exam-tag">CAT</span>
+        </div>
 
-        <label>Total Questions:</label>
-        <input type="number" id="totalQuestions" placeholder="Enter total questions"><br>
+        <div class="input-group">
+            <label for="totalQuestions">Total Questions</label>
+            <input type="number" id="totalQuestions" placeholder="e.g. 100">
+        </div>
 
-        <label>Maximum Marks:</label>
-        <input type="number" id="maxMarks" placeholder="Enter maximum marks"><br>
+        <div class="input-group">
+            <label for="maxMarks">Maximum Marks</label>
+            <input type="number" id="maxMarks" placeholder="e.g. 200">
+        </div>
 
-        <label>Total Questions Attempted:</label>
-        <input type="number" id="attemptedQuestions" placeholder="Number of attempted questions"><br>
+        <div class="input-group">
+            <label for="attemptedQuestions">Attempted Questions</label>
+            <input type="number" id="attemptedQuestions" placeholder="Number attempted">
+        </div>
 
-        <label>Number of Wrong Questions:</label>
-        <input type="number" id="wrongAnswers" placeholder="Number of wrong answers"><br>
+        <div class="input-group">
+            <label for="wrongAnswers">Wrong Answers</label>
+            <input type="number" id="wrongAnswers" placeholder="Number incorrect">
+        </div>
 
-        <label>Negative Marking Ratio:</label>
-        <select id="negativeRatio">
-            <option value="0">No Negative</option>
-            <option value="1/1">1/1</option>
-            <option value="1/2">1/2</option>
-            <option value="1/3">1/3</option>
-            <option value="1/4">1/4</option>
-            <option value="1/5">1/5</option>
-            <option value="1/6">1/6</option>
-            <option value="1/7">1/7</option>
-        </select><br>
+        <div class="input-group">
+            <label for="negativeRatio">Negative Marking</label>
+            <select id="negativeRatio">
+                <option value="0">No Negative</option>
+                <option value="1/1">-1 (Full)</option>
+                <option value="1/2">-½</option>
+                <option value="1/3">-⅓</option>
+                <option value="1/4">-¼</option>
+                <option value="1/5">-⅕</option>
+            </select>
+        </div>
 
-        <button onclick="calculateScore()">Calculate Score</button>
-        <button onclick="resetForm()">Clear</button>
+        <div class="button-group">
+            <button onclick="calculateScore()">Calculate</button>
+            <button onclick="resetForm()">Reset</button>
+        </div>
 
         <div class="result" id="result"></div>
     </div>
 
     <script>
         function calculateScore() {
-            let totalQuestions = parseInt(document.getElementById('totalQuestions').value);
-            let maxMarks = parseInt(document.getElementById('maxMarks').value);
-            let attemptedQuestions = parseInt(document.getElementById('attemptedQuestions').value);
-            let wrongAnswers = parseInt(document.getElementById('wrongAnswers').value);
-            let negativeRatio = document.getElementById('negativeRatio').value;
+            const totalQuestions = parseInt(document.getElementById('totalQuestions').value);
+            const maxMarks = parseInt(document.getElementById('maxMarks').value);
+            const attempted = parseInt(document.getElementById('attemptedQuestions').value);
+            const wrong = parseInt(document.getElementById('wrongAnswers').value);
+            const ratio = document.getElementById('negativeRatio').value;
 
-            if (isNaN(totalQuestions) || isNaN(maxMarks) || isNaN(attemptedQuestions) || isNaN(wrongAnswers)) {
-                document.getElementById('result').innerHTML = "Please enter valid numbers!";
+            if ([totalQuestions, maxMarks, attempted, wrong].some(isNaN)) {
+                showResult("Please fill all fields correctly!", true);
                 return;
             }
 
-            let marksPerCorrect = maxMarks / totalQuestions;
-            let negativeMarks = eval(negativeRatio) * marksPerCorrect;
-            let correctAnswers = attemptedQuestions - wrongAnswers;
-            let score = (correctAnswers * marksPerCorrect) - (wrongAnswers * negativeMarks);
+            const correct = attempted - wrong;
+            const marksPerQuestion = maxMarks / totalQuestions;
+            const negativeMarks = wrong * (eval(ratio) * marksPerQuestion);
+            const finalScore = (correct * marksPerQuestion) - negativeMarks;
+
+            const breakdown = `
+                Correct: ${correct} × ${marksPerQuestion.toFixed(2)} = ${(correct * marksPerQuestion).toFixed(2)}
+                <br>Wrong: ${wrong} × -${(eval(ratio) * marksPerQuestion).toFixed(2)} = -${negativeMarks.toFixed(2)}
+            `;
             
-            document.getElementById('result').innerHTML = `Final Score: ${score.toFixed(2)}`;
+            showResult(`
+                Final Score: <span style="font-size:1.4em">${finalScore.toFixed(2)}</span>
+                <div style="font-size:0.8em; margin-top:0.5rem; opacity:0.8">${breakdown}</div>
+            `);
+        }
+
+        function showResult(text, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = text;
+            resultDiv.style.background = isError ? 'rgba(214, 48, 49, 0.1)' : 'rgba(0, 184, 148, 0.1)';
+            resultDiv.style.color = isError ? '#d63031' : '#00b894';
         }
 
         function resetForm() {
-            document.getElementById('totalQuestions').value = "";
-            document.getElementById('maxMarks').value = "";
-            document.getElementById('attemptedQuestions').value = "";
-            document.getElementById('wrongAnswers').value = "";
-            document.getElementById('negativeRatio').value = "0";
-            document.getElementById('result').innerHTML = "";
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            document.getElementById('negativeRatio').value = '0';
+            document.getElementById('result').innerHTML = '';
         }
     </script>
 
